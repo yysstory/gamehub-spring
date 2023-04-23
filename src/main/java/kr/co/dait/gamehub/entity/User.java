@@ -16,15 +16,20 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import kr.co.dait.gamehub.constant.Role;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
 @Entity
 @Table(name="TB_USER")
-@Getter @Setter
+@Getter
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements UserDetails{
 
     @Id
