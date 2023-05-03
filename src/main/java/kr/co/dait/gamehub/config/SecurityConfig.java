@@ -15,46 +15,49 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
     
-    // @Autowired
-    // MemberService memberService;
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
     private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
-
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        //로그인
+        http.formLogin(login -> login
+                .loginProcessingUrl("/api/web/login") 
+                .usernameParameter("userEmail") 
+                .passwordParameter("userPassword") 
+                .successHandler(customAuthenticationSuccessHandler) 
+                .failureHandler(customAuthenticationFailureHandler));
+        //로그아웃
+        http.logout(logout -> logout.logoutSuccessHandler(customLogoutSuccessHandler) 
+                .logoutUrl("/api/web/logout") 
+                .invalidateHttpSession(true).deleteCookies("JSESSIONID")); 
 
-        //인증설정
-        http.formLogin()
-        .loginPage("/") //인증이 필요한 곳에서 인증정보가 없을때 이동
-        .loginProcessingUrl("/user/login") //로그인 처리 경로
-        .usernameParameter("userName") //id파라미터
-        .passwordParameter("userPassword") //pw파라미터
-        .successHandler(customAuthenticationSuccessHandler) // 로그인 성공 시 실행
-        .failureHandler(customAuthenticationFailureHandler) // 로그인 실패 시 실행
-        .and()
-        .logout().logoutSuccessHandler(customLogoutSuccessHandler) //로그아웃 성공 시 실행
-        .logoutUrl("/user/logout") //로그아웃 처리 경로
-        .invalidateHttpSession(true).deleteCookies("JSESSIONID"); //세션날라고 쿠키날리고
+        //인증제한
+        http.authorizeHttpRequests().mvcMatchers("/api/web/game/**").authenticated(); 
+        //그외 전부 허용
+        http.authorizeHttpRequests().anyRequest().permitAll();
+        http.exceptionHandling(handling -> handling
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                .accessDeniedHandler(customAccessDeniedHandler));
 
-        
-        //http.authorizeRequests().mvcMatchers("/user/**").authenticated(); //user 관련 
-        http.authorizeRequests().anyRequest().permitAll();
-        
-        http.csrf().disable().cors().disable();
-
-        //예외처리 
-        // http.exceptionHandling()
-        //         .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-        // ;
-
+        //csrf 인증 제거
+        http.csrf(csrf->csrf.disable());
+        //cors 제한 제거
+        http.cors(cors->cors.disable());
+        //xss basic 방어(추후 lucy 설정)
+        http.headers(headers -> headers.xssProtection());
 
         return http.build();
     }
 
+
+    
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

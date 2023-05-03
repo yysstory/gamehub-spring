@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import kr.co.dait.gamehub.constant.Role;
@@ -20,22 +21,27 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 
 @Entity
 @Table(name="TB_USER")
 @Getter
+@Setter
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements UserDetails{
+public class User extends BaseTime implements UserDetails{
 
     @Id
     @Column(name="USER_ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
+
+    @Column(name="USER_LOGIN_ID", unique = true)
+    private String userLoginId;    
 
     @Column(name="USER_NAME")
     private String userName;
@@ -54,15 +60,9 @@ public class User implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-		Collection<GrantedAuthority> collectors = new ArrayList<>();
-		collectors.add(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return "USER";
-            }
-        }); 
-		return collectors;
-    }
+        ArrayList<GrantedAuthority> auth = new ArrayList<GrantedAuthority>();
+        auth.add(new SimpleGrantedAuthority("USER"));
+        return auth;    }
 
     @Override
     public String getUsername() {
@@ -76,25 +76,21 @@ public class User implements UserDetails{
 
     @Override
     public boolean isAccountNonExpired() {
-        //throw new UnsupportedOperationException("Unimplemented method 'isAccountNonExpired'");
         return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        //throw new UnsupportedOperationException("Unimplemented method 'isAccountNonLocked'");
         return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        //throw new UnsupportedOperationException("Unimplemented method 'isCredentialsNonExpired'");
         return true;
     }
 
     @Override
     public boolean isEnabled() {
-        //throw new UnsupportedOperationException("Unimplemented method 'isEnabled'");
         return true;
     }
 

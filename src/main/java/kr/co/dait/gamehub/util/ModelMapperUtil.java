@@ -7,7 +7,7 @@ import org.modelmapper.ModelMapper;
 
 public class ModelMapperUtil {
 
-    static final ModelMapper modelMapper = new ModelMapper();
+    private static ModelMapper modelMapper = new ModelMapper();
 
     public static <D> D map(java.lang.Object source, java.lang.Class<D> destinationType) {
       return modelMapper.map(source,destinationType);
@@ -20,6 +20,5 @@ public class ModelMapperUtil {
         }
         return list;
     }
-    
     
 }

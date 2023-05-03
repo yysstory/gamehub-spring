@@ -1,22 +1,25 @@
 1. 인증필요
 
 게임등록 
-POST /site/user/game
+POST /api/web/user/game
 gameName 게임명
 
-게임불러오기(리스트/상세) 
-GET /site/user/game/{id}
+게임불러오기(리스트)
+GET /api/web/user/game
+
+게임불러오기(상세) 
+GET /api/web/user/game/{id}
 
 
 2. 인증 불필요
 
 회원가입 
-POST /site/signup
+POST /api/web/signup
     userName (사용자 이름)
     password (비밀번호)
 
 로그인 
-POST /site/login
+POST /api/web/login
     username (사용자 이름)
     password (비밀번호)
 

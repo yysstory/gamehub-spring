@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class UserService implements UserDetailsService{
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     public List<UserDto> findAll(){
         return ModelMapperUtil.mapList(userRepository.findAll(), UserDto.class) ;
@@ -29,20 +32,19 @@ public class UserService implements UserDetailsService{
         return userRepository.findByUserEmail(userEmail);
     }
 
-    public User addUser(User user) {
-        return userRepository.save(user);
-    }
-
-    public User saveUser(User user){
-        validateDuplicateMember(user);
-        return userRepository.save(user);
-    }
-
-    private void validateDuplicateMember(User user){
-        User findUser = userRepository.findByUserEmail(user.getUserEmail());
+    //회원가입
+    public UserDto addUser(UserDto userDto) {
+        //패스워드 암호화
+        userDto.setUserPassword(passwordEncoder.encode(userDto.getUserPassword()));
+        //기존 가업 회원 확인
+        User findUser = userRepository.findByUserEmail(userDto.getUserEmail().trim());
         if(findUser != null){
-            throw new IllegalStateException("이미 가입된 회원입니다.");
-        }
+            throw new IllegalStateException("이미 가입된 이메일 주소 입니다.");
+        }        
+        //회원정보 저장
+        User user = ModelMapperUtil.map(userDto, User.class);
+        userRepository.save(user);
+        return userDto;
     }
 
     @Override
