@@ -3,12 +3,11 @@ package kr.co.dait.gamehub.service;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.security.core.token.Sha512DigestUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.validation.Valid;
 import kr.co.dait.gamehub.dto.GameDto;
 import kr.co.dait.gamehub.entity.Game;
 import kr.co.dait.gamehub.entity.User;

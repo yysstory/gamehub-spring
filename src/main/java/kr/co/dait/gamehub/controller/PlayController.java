@@ -2,13 +2,12 @@ package kr.co.dait.gamehub.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import kr.co.dait.gamehub.constant.ResponseCode;
 import kr.co.dait.gamehub.dto.GamePlayDto;
 import kr.co.dait.gamehub.dto.PlayDto;

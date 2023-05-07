@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .invalidateHttpSession(true).deleteCookies("JSESSIONID")); 
 
         //인증제한
-        http.authorizeHttpRequests().mvcMatchers("/api/web/game/**").authenticated(); 
+        http.authorizeHttpRequests().requestMatchers("/api/web/game/**").authenticated(); 
         //그외 전부 허용
         http.authorizeHttpRequests().anyRequest().permitAll();
         http.exceptionHandling(handling -> handling

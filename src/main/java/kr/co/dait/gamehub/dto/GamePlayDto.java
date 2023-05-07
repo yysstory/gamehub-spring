@@ -2,9 +2,8 @@ package kr.co.dait.gamehub.dto;
 
 import java.math.BigInteger;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 

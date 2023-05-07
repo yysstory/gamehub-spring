@@ -5,12 +5,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.co.dait.gamehub.dto.GameDto;
 import kr.co.dait.gamehub.dto.GamePlayDto;
 import kr.co.dait.gamehub.dto.PlayDto;
 import kr.co.dait.gamehub.entity.Game;
